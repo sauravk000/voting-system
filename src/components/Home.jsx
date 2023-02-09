@@ -7,12 +7,12 @@ function Home() {
     return (
         <div>
             <NavBar />
-            <div className="content">
-                <div className="homeImage">
-                    <img src={VotingImg} alt="Voting Image" />
+            <div className='content'>
+                <div className='homeImage'>
+                    <img src={VotingImg} alt='Voting Image' />
                 </div>
                 <div>
-                    <div className="title">
+                    <div className='title'>
                         The Best <br /> Voting System
                     </div>
                     <p>
@@ -27,8 +27,8 @@ function Home() {
                         Duis ut pulvinar massa. Etiam aliquam elit diam, eu
                         elementum leo eleifend nec. Praesent vel posuere.
                     </p>
-                    <Link to="/login">
-                        <Button text="Vote"></Button>
+                    <Link to='/login'>
+                        <Button text='Vote' size='large'></Button>
                     </Link>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import { getLoginData } from './LoginDataProvider';
 function Dashboard() {
     const LoginData = getLoginData();
     if (!LoginData) {
-        redirect('/login');
+        return <Navigate to="/dashboard" />;
     }
     return <div>Dashboard</div>;
 }
