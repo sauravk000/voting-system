@@ -9,23 +9,23 @@ function NavBar() {
     }
 
     return (
-        <div className="nav">
-            <div className="brand">VoSys</div>
-            <div className="links">
-                <Link to="/contact">Contact Us</Link>
-                <Link to="/about">About Us</Link>
+        <div className='nav'>
+            <div className='brand'>VoSys</div>
+            <div className='links'>
+                <Link to='/contact'>Contact Us</Link>
+                <Link to='/about'>About Us</Link>
                 {!loginData ? (
                     <>
-                        <Link to="/login">
-                            <Button text="Login"></Button>
+                        <Link to='/login'>
+                            <Button text='Login'></Button>
                         </Link>
-                        <Link to="/register">
-                            <Button text="Register"></Button>
+                        <Link to='/register'>
+                            <Button text='Register'></Button>
                         </Link>
                     </>
                 ) : (
-                    <Link to="/dashboard">
-                        <Button text={loginData.name}></Button>
+                    <Link to='/dashboard'>
+                        <Button text={loginData.username}></Button>
                     </Link>
                 )}
             </div>

@@ -11,7 +11,7 @@ function Home() {
                 <div className='homeImage'>
                     <img src={VotingImg} alt='Voting Image' />
                 </div>
-                <div>
+                <div className='description'>
                     <div className='title'>
                         The Best <br /> Voting System
                     </div>
@@ -27,7 +27,7 @@ function Home() {
                         Duis ut pulvinar massa. Etiam aliquam elit diam, eu
                         elementum leo eleifend nec. Praesent vel posuere.
                     </p>
-                    <Link to='/login'>
+                    <Link className='focusBtn' to='/login'>
                         <Button text='Vote' size='large'></Button>
                     </Link>
                 </div>
