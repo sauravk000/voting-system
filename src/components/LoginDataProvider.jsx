@@ -1,37 +1,41 @@
-import axios from 'axios';
 import React, { useContext, createContext, useState, useEffect } from 'react';
 
 const LoginDataContext = createContext();
 
+const UpdateLoginDataContext = createContext();
+
 export function getLoginData() {
-    return useContext(LoginDataContext);
+  return useContext(LoginDataContext);
 }
 
-async function getIfAuthorized() {
-    try {
-        let authstr = localStorage.getItem('auth');
-        let authOb = JSON.parse(authstr);
-        return { username: authOb.username };
-    } catch (err) {
-        console.log(err);
-    }
+export function updateLoginData() {
+  return useContext(UpdateLoginDataContext);
 }
 
 export default function LoginDataProvider({ children }) {
-    const [loginData, setLoginData] = useState(null);
-    const [isLoading, setLoading] = useState(true);
-    //Used temporarily until backend data
+  const [loginData, setLoginData] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  //Used temporarily until backend data
 
-    async function getData() {
-        setLoginData(await getIfAuthorized());
-        setLoading(false);
+  async function getData() {
+    try {
+      console.log('InsideAuthorized');
+      let authstr = localStorage.getItem('auth');
+      let authOb = JSON.parse(authstr);
+      setLoginData({ username: authOb.username });
+    } catch (err) {
+      console.log(err);
     }
-    useEffect(() => {
-        getData();
-    }, [isLoading]);
-    return (
-        <LoginDataContext.Provider value={loginData}>
-            {children}
-        </LoginDataContext.Provider>
-    );
+    setLoading(false);
+  }
+  useEffect(() => {
+    getData();
+  }, [isLoading]);
+  return (
+    <LoginDataContext.Provider value={loginData}>
+      <UpdateLoginDataContext.Provider value={getData}>
+        {children}
+      </UpdateLoginDataContext.Provider>
+    </LoginDataContext.Provider>
+  );
 }
