@@ -6,7 +6,7 @@ body {
   margin: 0;
 }
 
-.brand {
+.brand a {
   font-family: 'Teko';
   font-size: 1.5rem;
   color: #bababa;
@@ -86,7 +86,6 @@ a {
   margin-top: 5px;
 }
 
-
 .content {
   margin: 0;
   height: calc(100vh - 60px);
@@ -94,42 +93,48 @@ a {
   justify-content: center;
   align-items: center;
   background-color: #000000;
-  background-image: url("/src/assets/topography.svg");
+  background-image: url('/src/assets/topography.svg');
 }
-
-
 
 /*
 ================
-Login
+Login/Register
 ================
 */
 
-.login {
+.login,
+.register {
   display: flex;
   justify-content: space-between;
   margin: 0;
   height: 100vh;
 }
 
-.login .brand {
-  margin-top: 1.5rem;
-  margin-left: 1.5rem;
+.login .brand,
+.register .brand {
+  padding: 10px;
+  margin-top: 3px;
 }
 
-.firstHalf{
+.firstHalf {
   background-image: url('/src/assets/topography.svg');
   background-position: 800px 1000px;
   flex-basis: 55%;
 }
 
-.otherHalf{ 
+.register .firstHalf {
+  flex-basis: 30%;
+}
+
+.otherHalf {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-basis: 45%;
   background: #0a0a0a;
-
+}
+.register .otherHalf {
+  flex-basis: 70%;
 }
 
 .otherHalf h1 {
@@ -141,7 +146,7 @@ form * {
 }
 
 label {
-  color: #9A9A9A;
+  color: #9a9a9a;
   margin-bottom: 9px;
   font-size: 1.2rem;
 }
@@ -157,18 +162,22 @@ form a {
   margin: 2rem auto;
 }
 
-input[type='text'], input[type='password']{
+input[type='text'],
+input[type='password'],
+input[type='email'],
+select, option {
   width: 23rem;
   height: 2.5rem;
   background-color: transparent;
-  border: 2px solid #5D5D5D;
+  border: 2px solid #5d5d5d;
   border-radius: 5px;
   font-size: 1.1rem;
   padding-left: 10px;
   color: #d9d9d9;
+  box-sizing: content-box;
 }
 
-input:focus {
+input:focus, select {
   border: 2px solid #888888;
   outline: none;
 }

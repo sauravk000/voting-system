@@ -1,5 +1,5 @@
-import { useState, useContext } from 'react';
-import { Link, Navigate, redirect } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import { getLoginData, updateLoginData } from './LoginDataProvider';
 import Button from '../components/Utils/Button';
 import axios from 'axios';
@@ -39,7 +39,9 @@ function Login() {
   return (
     <div className='login'>
       <div className='firstHalf'>
-        <div className='brand'>VoSys</div>
+        <div className='brand'>
+          <Link to='/'>VoSys</Link>
+        </div>
       </div>
       <div className='otherHalf'>
         <div>

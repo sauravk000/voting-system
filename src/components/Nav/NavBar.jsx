@@ -10,7 +10,9 @@ function NavBar() {
 
   return (
     <div className='nav'>
-      <div className='brand'>VoSys</div>
+      <div className='brand'>
+        <Link to='/'>VoSys</Link>
+      </div>
       <div className='links'>
         <Link to='/contact'>Contact Us</Link>
         <Link to='/about'>About Us</Link>
