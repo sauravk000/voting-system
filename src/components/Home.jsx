@@ -2,17 +2,13 @@ import { Link } from 'react-router-dom';
 import NavBar from './Nav/NavBar';
 import VotingImg from '../assets/Voting-amico.svg';
 import Button from './Utils/Button';
-import topographyImg from '../assets/topography.svg';
+// import topographyImg from '../assets/topography.svg';
 
 function Home() {
-  console.log(topographyImg);
   return (
     <div>
       <NavBar />
-      <div
-        className='content'
-        // style={{ backgroundImage: `url(${})` }}
-      >
+      <div className='content'>
         <div className='homeImage'>
           <img src={VotingImg} alt='Voting Image' />
         </div>

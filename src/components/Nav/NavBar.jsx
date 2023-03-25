@@ -14,8 +14,8 @@ function NavBar() {
         <Link to='/'>VoSys</Link>
       </div>
       <div className='links'>
-        <Link to='/contact'>Contact Us</Link>
-        <Link to='/about'>About Us</Link>
+        <Link to='#'>Contact Us</Link>
+        <Link to='#'>About Us</Link>
         {!loginData ? (
           <>
             <Link to='/login'>

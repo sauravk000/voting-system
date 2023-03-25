@@ -33,7 +33,6 @@ function Login() {
         alert('Invalid Username/Password');
         return;
       }
-      console.log(err);
     }
   }
   return (

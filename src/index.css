@@ -165,7 +165,8 @@ form a {
 input[type='text'],
 input[type='password'],
 input[type='email'],
-select, option {
+select,
+option {
   width: 23rem;
   height: 2.5rem;
   background-color: transparent;
@@ -177,7 +178,51 @@ select, option {
   box-sizing: content-box;
 }
 
-input:focus, select {
+input:focus,
+select {
   border: 2px solid #888888;
   outline: none;
+}
+
+.dashContainer {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.dashboard {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: row;
+  flex-grow: 1;
+  background-image: url('/src/assets/topography.svg');
+  background-color: #00000011;
+}
+
+.dashboard .nav {
+  flex-direction: column;
+  justify-self: flex-start;
+  padding: 10px;
+}
+
+/* Window */
+
+.window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: 400px;
+  background: #ffffff11;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.wTitle {
+  font-size: 2.5rem;
 }

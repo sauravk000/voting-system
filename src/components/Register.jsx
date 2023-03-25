@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { getLoginData, updateLoginData } from './LoginDataProvider';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { getLoginData } from './LoginDataProvider';
 import Button from '../components/Utils/Button';
 import axios from 'axios';
 
 function Register() {
+  const navigate = useNavigate();
   const [regInfo, setregInfo] = useState({
-    name: '',
     username: '',
+    email: '',
     canditateType: 'Candidate',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
   const LoginData = getLoginData();
-  const getData = updateLoginData();
   if (LoginData) {
     return <Navigate to='/dashboard' />;
   }
@@ -23,21 +23,19 @@ function Register() {
   }
   async function handleForm(e) {
     e.preventDefault();
+    let ob = {
+      username: regInfo.username,
+      isCandidate: regInfo.canditateType == 'Candidate',
+      password: regInfo.password,
+      email: regInfo.email,
+    };
     try {
-      let resp = await axios.post(
-        'http://localhost:5120/user/login',
-        regInfo
-      );
-      let ob = { ...resp.data, username: regInfo.username };
-      localStorage.setItem('auth', JSON.stringify(ob));
-      await getData();
-    } catch (err) {
-      if (err.response && err.response.status == 401) {
-        alert('Invalid Username/Password');
-        return;
+      let resp = await axios.post('http://localhost:5120/user/register', ob);
+      if (resp.data.success) {
+        console.log('Successfuly made');
+        navigate('/login');
       }
-      console.log(err);
-    }
+    } catch (err) {}
   }
   return (
     <div className='register'>
@@ -51,12 +49,12 @@ function Register() {
           <h1>Let's setup your account!</h1>
           <form>
             <div className='inputGroup'>
-              <label htmlFor='name'>Full Name</label>
+              <label htmlFor='username'>Username</label>
               <input
                 type='text'
-                name='name'
+                name='username'
                 required
-                value={regInfo.name}
+                value={regInfo.username}
                 onChange={(e) => {
                   setData(e);
                 }}
@@ -68,7 +66,7 @@ function Register() {
                 type='email'
                 name='email'
                 required
-                value={regInfo.name}
+                value={regInfo.email}
                 onChange={(e) => {
                   setData(e);
                 }}
@@ -76,19 +74,16 @@ function Register() {
             </div>
             <div className='inputGroup'>
               <label htmlFor='accountType'>Account Type</label>
-              <select name="accountType" id="accountType">
-                <option value="Candidate">Candidate</option>
-                <option value="Voter">Voter</option>
-              </select>
-              <input
-                type='text'
-                name='name'
-                required
-                value={regInfo.name}
+              <select
+                name='accountType'
+                id='accountType'
                 onChange={(e) => {
                   setData(e);
                 }}
-              />
+              >
+                <option value='Candidate'>Candidate</option>
+                <option value='Voter'>Voter</option>
+              </select>
             </div>
             <div className='inputGroup'>
               <label htmlFor='password'>Password</label>
