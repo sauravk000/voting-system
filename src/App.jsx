@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AddressDataProvider from './components/AddressDataProvider';
 import Dashboard from './components/Dashboard';
 import Base from './components/dashboard/Base';
 import Home from './components/Home';
@@ -9,11 +8,12 @@ import LoginDataProvider from './components/LoginDataProvider';
 import NotFound from './components/NotFound';
 import Register from './components/Register';
 import Vote from './components/Vote';
+import WebThreeProvider from './components/WebThreeProvider';
 
 function App() {
   return (
     <LoginDataProvider>
-      <AddressDataProvider>
+      <WebThreeProvider>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />}></Route>
@@ -27,7 +27,7 @@ function App() {
             <Route path='*' element={<NotFound />}></Route>
           </Routes>
         </BrowserRouter>
-      </AddressDataProvider>
+      </WebThreeProvider>
     </LoginDataProvider>
   );
 }

@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import NavBar from './Nav/NavBar';
 import VotingImg from '../assets/Voting-amico.svg';
 import Button from './Utils/Button';
-// import topographyImg from '../assets/topography.svg';
 
 function Home() {
   return (

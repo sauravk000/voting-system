@@ -1,36 +1,44 @@
+import axios from 'axios';
+import { getLoginData } from '../LoginDataProvider';
 import Window from '../Utils/Window';
-import { getAddressData, setAddressData } from '../AddressDataProvider';
-import {
-  onClickConnect,
-  onboard,
-  isMetaMaskInstalled,
-} from '../../tools/metamaskCon';
+import { getWebThreeData } from '../WebThreeProvider';
 
 function Base() {
-  const addressDt = getAddressData();
-  const setAdt = setAddressData();
-  async function bHandler(e) {
-    if (!isMetaMaskInstalled()) {
-      console.log('Metamask is not installed');
-      onboard();
-    } else {
-      let ad = (await onClickConnect())[0];
-      if (addressDt != ad) {
-        setAdt(ad);
-      }
+  const { isCandidate, username, token } = getLoginData();
+  const { connectWallet, connectedAccount, createCandidate } =
+    getWebThreeData();
+  const cAddBtnHandler = async function (e) {
+    try {
+      // const tx = await createCandidate(tCid, username);
+
+      const ob = { name: username, address: connectedAccount, cid: '234' };
+      let resp = await axios.post('http://localhost:5120/candidate/', ob);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
+
   return (
     <>
-      {!addressDt ? (
+      {!connectedAccount ? (
         <Window
           title='Metamask'
           desc='Connect with metamask'
           buttonTitle='Connect'
-          buttonHandler={bHandler}
+          buttonHandler={connectWallet}
         />
       ) : (
         <>
+          {isCandidate ? (
+            <Window
+              title='Candidate'
+              desc='Add yourself as candidate'
+              buttonTitle='Add'
+              buttonHandler={cAddBtnHandler}
+            />
+          ) : (
+            <></>
+          )}
           <Window
             title='Host View'
             desc='Control the candidates and the contract'

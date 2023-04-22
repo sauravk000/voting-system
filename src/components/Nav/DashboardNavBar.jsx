@@ -1,11 +1,11 @@
 import Button from '../Utils/Button';
 import { Link } from 'react-router-dom';
 import { getLoginData } from '../LoginDataProvider';
-import { getAddressData } from '../AddressDataProvider';
+import { getWebThreeData } from '../WebThreeProvider';
 
 function DashboardNavBar() {
   const loginData = getLoginData();
-  const addressData = getAddressData();
+  const { connectedAccount } = getWebThreeData();
   if (!loginData) {
     console.log('Null');
   }
@@ -17,7 +17,9 @@ function DashboardNavBar() {
       </div>
       <div className='links'>
         <Link to='#'>
-          <Button text={!addressData ? 'Not connected' : 'Connected'}></Button>
+          <Button
+            text={!connectedAccount ? 'Disconnected' : 'Connected'}
+          ></Button>
         </Link>
       </div>
     </div>

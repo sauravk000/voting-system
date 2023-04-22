@@ -14,7 +14,6 @@ export function updateLoginData() {
 
 export default function LoginDataProvider({ children }) {
   const [loginData, setLoginData] = useState(null);
-  const [isLoading, setLoading] = useState(true);
   //Used temporarily until backend data
 
   async function getData() {
@@ -22,15 +21,16 @@ export default function LoginDataProvider({ children }) {
       let authstr = localStorage.getItem('auth');
       let authOb = JSON.parse(authstr);
       if (loginData == null || authOb.username != loginData.username)
-        setLoginData({ username: authOb.username });
+        setLoginData({
+          username: authOb.username,
+          token: authOb.token,
+          isCandidate: authOb.isCandidate,
+        });
     } catch (err) {
       console.log(err);
     }
-    setLoading(false);
   }
-  useEffect(() => {
-    getData();
-  }, [isLoading]);
+  getData();
   return (
     <LoginDataContext.Provider value={loginData}>
       <UpdateLoginDataContext.Provider value={getData}>

@@ -25,7 +25,11 @@ function Login() {
         'http://localhost:5120/user/login',
         loginInfo
       );
-      let ob = { ...resp.data, username: loginInfo.username };
+      let ob = {
+        ...resp.data,
+        username: loginInfo.username,
+        isCandidate: resp.data.isCandidate,
+      };
       localStorage.setItem('auth', JSON.stringify(ob));
       await getData();
     } catch (err) {
