@@ -226,12 +226,16 @@ select {
 .wTitle {
   font-size: 2.5rem;
 }
+.wInput {
+  margin: 20px;
+}
 
 .hidden {
   display: none !important;
 }
 
-.loadingScreen {
+.loadingScreen,
+.modal {
   position: absolute;
   left: 0;
   top: 0;
@@ -251,4 +255,82 @@ select {
   justify-content: center;
   border: 2px solid rgba(255, 255, 0, 0.071);
   border-radius: 5%;
+}
+
+.alert {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  justify-content: flex-start;
+  border: 2px solid #7a8a02;
+  border-radius: 5px;
+  padding: 10px;
+  min-height: 300px;
+  max-width: 800px;
+}
+
+.alertTitle {
+  font-size: large;
+  font-weight: bold;
+}
+
+.success {
+  color: #0eb41c;
+  border-color: #0eb41c;
+}
+
+.success .button {
+  background-color: #00b30f;
+  border-color: #00b30f;
+}
+
+.warning {
+  color: #a7b300;
+  border-color: #a7b300;
+}
+
+.error {
+  color: #b30000;
+  border-color: #b30000;
+}
+
+.error .button {
+  background-color: #b30000;
+  border-color: #b30000;
+}
+
+.info {
+  color: white;
+  border-color: white;
+}
+
+.alert * {
+  margin: 20px;
+}
+
+.hostView {
+  display: flex;
+}
+
+.votesDisplay {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 70%;
+}
+
+.voteViewPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.voteChart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff22;
+  border-radius: 5px;
 }

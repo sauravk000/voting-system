@@ -2,9 +2,9 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Onboarding from '@metamask/onboarding';
 import axios from 'axios';
-import LoadinScreen from './Utils/LoadingScreen';
 import { getLoginData } from './LoginDataProvider';
-import LoadingScreen from './Utils/LoadingScreen';
+import { getLoadFunc } from './LoadingProvider';
+import { setAlert } from './AlertProvider';
 
 const WebThreeContext = createContext();
 
@@ -14,8 +14,9 @@ export const getWebThreeData = function () {
 
 export default function WebThreeProvider({ children }) {
   const [connectedAccount, setConnectedAccount] = useState('');
-  const [loading, setLoading] = useState(false);
+  const setLoading = getLoadFunc();
   const loginData = getLoginData();
+  const setAlertInfo = setAlert();
 
   let token;
   if (loginData) token = loginData.token;
@@ -25,12 +26,8 @@ export default function WebThreeProvider({ children }) {
       const accounts = await ethereum.request({ method: 'eth_accounts' });
       if (accounts.length) {
         setConnectedAccount(accounts[0]);
-        if (token) await initEvents();
-      } else {
-        console.log('No accounts found');
       }
     } catch (err) {
-      console.log(err);
       throw new Error('No ethereum object!');
     }
   };
@@ -41,19 +38,6 @@ export default function WebThreeProvider({ children }) {
 
   let ethereum;
   if (typeof window.ethereum != 'undefined') ethereum = window.ethereum;
-
-  const initEvents = async function () {
-    const contract = await getEthereumContract(token);
-    contract.on('TeamID', async (tx, ob) => {
-      console.log(tx);
-      console.log(ob);
-      await contract.getTeamToken(ob.log.data);
-    });
-    contract.on('Token', async (tx, ob) => {
-      console.log(ob);
-      loading(false);
-    });
-  };
 
   const getEthereumContract = async function () {
     try {
@@ -71,10 +55,47 @@ export default function WebThreeProvider({ children }) {
     }
   };
 
+  const voteHandle = async function (tCid, cid) {
+    setLoading(true);
+    const contract = await getEthereumContract();
+    try {
+      const tx = await contract.vote(tCid, cid);
+      const rpt = await tx.wait(5);
+      setLoading(false);
+      setAlertInfo({
+        title: 'Success',
+        description: `Your vote has been successfully done. Your transaction hash: ${tx.hash}`,
+        type: 'success',
+        enabled: true,
+      });
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      setAlertInfo({
+        title: 'Error',
+        description:
+          'Some error occured. Maybe you have tried to vote again or the entered details are invalid.',
+        type: 'error',
+        enabled: true,
+      });
+    }
+  };
+
+  const getVoteAndName = async function (tCid, cid) {
+    const contract = await getEthereumContract();
+    try {
+      const name = await contract.getCandidateName(tCid, cid);
+      const votes = Number(await contract.getCandidateVotes(tCid, cid));
+      return { name, votes };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const getContractDetails = async function () {
     try {
       const cdetails = await axios.get(
-        'http://localhost:5120/vote/getContractAddress',
+        'https://voting-system-backend.onrender.com/vote/getContractAddress',
         {
           headers: {
             Authorization: 'Bearer ' + token,
@@ -87,20 +108,126 @@ export default function WebThreeProvider({ children }) {
     }
   };
 
-  const createTeam = async function (teamName) {
+  const createTeam = async (teamName) => {
     try {
       setLoading(true);
-      const contract = await getEthereumContract(token);
+      const contract = await getEthereumContract();
+      contract.on('TeamID', async (tx, ob) => {
+        const cid = ob.log.data;
+        contract.removeAllListeners();
+        let resp = await axios.post(
+          'https://voting-system-backend.onrender.com/team/create',
+          {
+            name: teamName,
+            tCid: cid,
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+          }
+        );
+        setLoading(false);
+        setAlertInfo({
+          title: 'Success',
+          description: `Team has been made successfully. Your team cid: ${cid}.`,
+          type: 'success',
+          enabled: true,
+        });
+      });
       await contract.createTeam(teamName);
     } catch {
+      setAlertInfo({
+        title: 'Error',
+        description: 'Some error occured.',
+        type: 'error',
+        enabled: true,
+      });
       setLoading(false);
     }
   };
 
   const createCandidate = async function (tCid, name) {
-    const contract = await getEthereumContract(token);
-    const res = await contract.addCandidate(tCid, name);
-    console.log(res);
+    setLoading(true);
+    const contract = await getEthereumContract();
+    try {
+      contract.on('CandidateToken', async (tx, ob) => {
+        let resp = await axios.post(
+          'https://voting-system-backend.onrender.com/team/addCandidate',
+          {
+            tCid: tCid,
+            cid: ob.log.data,
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+          }
+        );
+        setLoading(false);
+        setAlertInfo({
+          title: 'Success',
+          description: `Your account has ben added. Your cid: ${ob.log.data}`,
+          type: 'success',
+          enabled: true,
+        });
+        contract.removeAllListeners();
+      });
+      await contract.addCandidate(tCid, name);
+    } catch (err) {
+      setLoading(false);
+      contract.removeAllListeners();
+      console.log(err);
+    }
+  };
+
+  const addVoter = async function (tCid, voterAdd) {
+    setLoading(true);
+    const contract = await getEthereumContract();
+    try {
+      const transaction = await contract.addVoter(tCid, voterAdd);
+      const receipt = await transaction.wait(5);
+      setLoading(false);
+      setAlertInfo({
+        title: 'Success',
+        description: `Voter address has ben successfully added.`,
+        type: 'success',
+        enabled: true,
+      });
+    } catch (err) {
+      setLoading(false);
+      setAlertInfo({
+        title: 'Error',
+        description: `Some error occured.`,
+        type: 'error',
+        enabled: true,
+      });
+      console.log(err);
+    }
+  };
+
+  const removeVoter = async function (tCid, voterAdd) {
+    setLoading(true);
+    const contract = await getEthereumContract();
+    try {
+      await contract.removeVoter(tCid, voterAdd);
+      setLoading(false);
+      setAlertInfo({
+        title: 'Success',
+        description: `Voter address has ben successfully removed.`,
+        type: 'success',
+        enabled: true,
+      });
+    } catch (err) {
+      setLoading(false);
+      setAlertInfo({
+        title: 'Error',
+        description: `Some error occured.`,
+        type: 'error',
+        enabled: true,
+      });
+      console.log(err);
+    }
   };
 
   const connectWallet = async function () {
@@ -121,10 +248,18 @@ export default function WebThreeProvider({ children }) {
   };
   return (
     <WebThreeContext.Provider
-      value={{ connectWallet, connectedAccount, createTeam, createCandidate }}
+      value={{
+        connectWallet,
+        connectedAccount,
+        createTeam,
+        createCandidate,
+        voteHandle,
+        getVoteAndName,
+        addVoter,
+        removeVoter,
+      }}
     >
       {children}
-      <LoadingScreen isLoading={loading}></LoadingScreen>
     </WebThreeContext.Provider>
   );
 }

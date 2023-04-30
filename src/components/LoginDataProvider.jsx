@@ -19,13 +19,15 @@ export default function LoginDataProvider({ children }) {
   async function getData() {
     try {
       let authstr = localStorage.getItem('auth');
-      let authOb = JSON.parse(authstr);
-      if (loginData == null || authOb.username != loginData.username)
-        setLoginData({
-          username: authOb.username,
-          token: authOb.token,
-          isCandidate: authOb.isCandidate,
-        });
+      if (authstr) {
+        let authOb = JSON.parse(authstr);
+        if (loginData == null || authOb.username != loginData.username)
+          setLoginData({
+            username: authOb.username,
+            token: authOb.token,
+            isCandidate: authOb.isCandidate,
+          });
+      }
     } catch (err) {
       console.log(err);
     }

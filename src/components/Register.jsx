@@ -3,16 +3,20 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { getLoginData } from './LoginDataProvider';
 import Button from '../components/Utils/Button';
 import axios from 'axios';
+import { setAlert } from './AlertProvider';
+
+const iregInfo = {
+  username: '',
+  email: '',
+  canditateType: 'Candidate',
+  password: '',
+  confirmPassword: '',
+};
 
 function Register() {
   const navigate = useNavigate();
-  const [regInfo, setregInfo] = useState({
-    username: '',
-    email: '',
-    canditateType: 'Candidate',
-    password: '',
-    confirmPassword: '',
-  });
+  const setAlertInfo = setAlert();
+  const [regInfo, setregInfo] = useState(iregInfo);
   const LoginData = getLoginData();
   if (LoginData) {
     return <Navigate to='/dashboard' />;
@@ -30,12 +34,30 @@ function Register() {
       email: regInfo.email,
     };
     try {
-      let resp = await axios.post('http://localhost:5120/user/register', ob);
+      let resp = await axios.post(
+        'https://voting-system-backend.onrender.com/user/register',
+        ob
+      );
       if (resp.data.success) {
-        console.log('Successfuly made');
+        setAlertInfo({
+          title: 'Account Created',
+          description: 'Your account has been successfully created',
+          enabled: true,
+          type: 'success',
+        });
         navigate('/login');
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+      setAlertInfo({
+        title: 'Invalid Information',
+        description: 'Check if you have entered everything correctly',
+        enabled: true,
+        type: 'success',
+      });
+    } finally {
+      setregInfo(iregInfo);
+    }
   }
   return (
     <div className='register'>

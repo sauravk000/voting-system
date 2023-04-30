@@ -3,12 +3,14 @@ import { Link, Navigate } from 'react-router-dom';
 import { getLoginData, updateLoginData } from './LoginDataProvider';
 import Button from '../components/Utils/Button';
 import axios from 'axios';
+import { setAlert } from './AlertProvider';
 
 function Login() {
   const [loginInfo, setLoginInfo] = useState({
     username: '',
     password: '',
   });
+  const setAlertInfo = setAlert();
   const LoginData = getLoginData();
   const getData = updateLoginData();
   if (LoginData) {
@@ -22,7 +24,7 @@ function Login() {
     e.preventDefault();
     try {
       let resp = await axios.post(
-        'http://localhost:5120/user/login',
+        'https://voting-system-backend.onrender.com/user/login',
         loginInfo
       );
       let ob = {
@@ -30,13 +32,25 @@ function Login() {
         username: loginInfo.username,
         isCandidate: resp.data.isCandidate,
       };
+      setLoginInfo({
+        username: '',
+        password: '',
+      });
       localStorage.setItem('auth', JSON.stringify(ob));
       await getData();
     } catch (err) {
+      console.log(err);
       if (err.response && err.response.status == 401) {
-        alert('Invalid Username/Password');
+        setAlertInfo({
+          title: 'Warning!',
+          description: 'Invalid Username/Password',
+          enabled: true,
+          type: 'warning',
+        });
         return;
       }
+    } finally {
+      setLoginInfo({ username: '', password: '' });
     }
   }
   return (

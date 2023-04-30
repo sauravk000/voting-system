@@ -6,9 +6,6 @@ import { getWebThreeData } from '../WebThreeProvider';
 function DashboardNavBar() {
   const loginData = getLoginData();
   const { connectedAccount } = getWebThreeData();
-  if (!loginData) {
-    console.log('Null');
-  }
 
   return (
     <div className='nav'>
