@@ -23,7 +23,6 @@ function Vote() {
 
   async function handleForm(e) {
     e.preventDefault();
-    console.log('Entered');
     await voteHandle(voteInfo.tCid, voteInfo.cid);
     setVoteInfo({
       tCid: '',

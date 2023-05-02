@@ -4,9 +4,6 @@ import { getLoginData } from '../LoginDataProvider';
 
 function NavBar() {
   const loginData = getLoginData();
-  if (!loginData) {
-    console.log('Null');
-  }
 
   return (
     <div className='nav'>

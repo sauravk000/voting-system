@@ -5,6 +5,7 @@ import axios from 'axios';
 import { getLoginData } from './LoginDataProvider';
 import { getLoadFunc } from './LoadingProvider';
 import { setAlert } from './AlertProvider';
+import { contractAddress, abi } from './constants/constants.js';
 
 const WebThreeContext = createContext();
 
@@ -43,7 +44,7 @@ export default function WebThreeProvider({ children }) {
     try {
       const provider = new ethers.BrowserProvider(ethereum);
       const signer = await provider.getSigner();
-      const { contractAddress, abi } = (await getContractDetails()).data;
+      const { contractAddress, abi } = getContractDetails();
       const candidateHandlerContract = new ethers.Contract(
         contractAddress,
         abi,
@@ -92,17 +93,9 @@ export default function WebThreeProvider({ children }) {
     }
   };
 
-  const getContractDetails = async function () {
+  const getContractDetails = function () {
     try {
-      const cdetails = await axios.get(
-        'https://voting-system-backend.onrender.com/vote/getContractAddress',
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        }
-      );
-      return cdetails;
+      return { contractAddress, abi };
     } catch (err) {
       console.log(err);
     }
