@@ -109,7 +109,7 @@ export default function WebThreeProvider({ children }) {
         const cid = ob.log.data;
         contract.removeAllListeners();
         let resp = await axios.post(
-          'https://voting-system-backend.onrender.com/team/create',
+          'https://excited-fatigues-colt.cyclic.app/team/create',
           {
             name: teamName,
             tCid: cid,
@@ -146,7 +146,7 @@ export default function WebThreeProvider({ children }) {
     try {
       contract.on('CandidateToken', async (tx, ob) => {
         let resp = await axios.post(
-          'https://voting-system-backend.onrender.com/team/addCandidate',
+          'https://excited-fatigues-colt.cyclic.app/team/addCandidate',
           {
             tCid: tCid,
             cid: ob.log.data,

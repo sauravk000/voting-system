@@ -38,7 +38,7 @@ function Register() {
     };
     try {
       let resp = await axios.post(
-        'https://voting-system-backend.onrender.com/user/register',
+        'https://excited-fatigues-colt.cyclic.app/user/register',
         ob
       );
       setLoading(false);
@@ -57,9 +57,9 @@ function Register() {
       console.log(err);
       setAlertInfo({
         title: 'Invalid Information',
-        description: 'Check if you have entered everything correctly',
+        description: 'Check if you have entered everything correctly.',
         enabled: true,
-        type: 'success',
+        type: 'warning',
       });
     } finally {
       setregInfo(iregInfo);

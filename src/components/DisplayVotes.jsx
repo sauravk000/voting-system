@@ -19,7 +19,7 @@ function DisplayVotes(props) {
     let dt = [];
     let count = 0;
     let resp = await axios.get(
-      'https://voting-system-backend.onrender.com/team/getTeam/' + tCidV,
+      'https://excited-fatigues-colt.cyclic.app/team/getTeam/' + tCidV,
       {
         headers: {
           Authorization: 'Bearer ' + token,

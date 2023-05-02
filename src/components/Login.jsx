@@ -27,7 +27,7 @@ function Login() {
     try {
       setLoading(true);
       let resp = await axios.post(
-        'https://voting-system-backend.onrender.com/user/login',
+        'https://excited-fatigues-colt.cyclic.app/user/login',
         loginInfo
       );
       let ob = {
