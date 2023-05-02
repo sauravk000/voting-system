@@ -4,6 +4,7 @@ import { getLoginData } from './LoginDataProvider';
 import Button from '../components/Utils/Button';
 import axios from 'axios';
 import { setAlert } from './AlertProvider';
+import { getLoadFunc } from './LoadingProvider';
 
 const iregInfo = {
   username: '',
@@ -18,6 +19,7 @@ function Register() {
   const setAlertInfo = setAlert();
   const [regInfo, setregInfo] = useState(iregInfo);
   const LoginData = getLoginData();
+  const setLoading = getLoadFunc();
   if (LoginData) {
     return <Navigate to='/dashboard' />;
   }
@@ -27,6 +29,7 @@ function Register() {
   }
   async function handleForm(e) {
     e.preventDefault();
+    setLoading(true);
     let ob = {
       username: regInfo.username,
       isCandidate: regInfo.canditateType == 'Candidate',
@@ -38,6 +41,7 @@ function Register() {
         'https://voting-system-backend.onrender.com/user/register',
         ob
       );
+      setLoading(false);
       if (resp.data.success) {
         setAlertInfo({
           title: 'Account Created',
@@ -45,9 +49,11 @@ function Register() {
           enabled: true,
           type: 'success',
         });
+
         navigate('/login');
       }
     } catch (err) {
+      setLoading(false);
       console.log(err);
       setAlertInfo({
         title: 'Invalid Information',

@@ -4,6 +4,7 @@ import { getLoginData, updateLoginData } from './LoginDataProvider';
 import Button from '../components/Utils/Button';
 import axios from 'axios';
 import { setAlert } from './AlertProvider';
+import { getLoadFunc } from './LoadingProvider';
 
 function Login() {
   const [loginInfo, setLoginInfo] = useState({
@@ -13,6 +14,7 @@ function Login() {
   const setAlertInfo = setAlert();
   const LoginData = getLoginData();
   const getData = updateLoginData();
+  const setLoading = getLoadFunc();
   if (LoginData) {
     return <Navigate to='/dashboard' />;
   }
@@ -23,6 +25,7 @@ function Login() {
   async function handleForm(e) {
     e.preventDefault();
     try {
+      setLoading(true);
       let resp = await axios.post(
         'https://voting-system-backend.onrender.com/user/login',
         loginInfo
@@ -38,8 +41,10 @@ function Login() {
       });
       localStorage.setItem('auth', JSON.stringify(ob));
       await getData();
+      setLoading(false);
     } catch (err) {
       console.log(err);
+      setLoading(false);
       if (err.response && err.response.status == 401) {
         setAlertInfo({
           title: 'Warning!',
